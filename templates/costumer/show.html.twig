@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Costumer{% endblock %}
+
+{% block body %}
+    <h1>Costumer</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ costumer.id }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ costumer.firstname }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ costumer.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Nameprefix</th>
+                <td>{{ costumer.nameprefix }}</td>
+            </tr>
+            <tr>
+                <th>Street</th>
+                <td>{{ costumer.street }}</td>
+            </tr>
+            <tr>
+                <th>Housenumber</th>
+                <td>{{ costumer.housenumber }}</td>
+            </tr>
+            <tr>
+                <th>Postalcode</th>
+                <td>{{ costumer.postalcode }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ costumer.city }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ costumer.phone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ costumer.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('costumer_index') }}">back to list</a>
+
+    <a href="{{ path('costumer_edit', {'id': costumer.id}) }}">edit</a>
+
+    {{ include('costumer/_delete_form.html.twig') }}
+{% endblock %}

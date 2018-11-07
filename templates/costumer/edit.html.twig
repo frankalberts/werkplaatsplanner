@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Costumer{% endblock %}
+
+{% block body %}
+    <h1>Edit Costumer</h1>
+
+    {{ include('costumer/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('costumer_index') }}">back to list</a>
+
+    {{ include('costumer/_delete_form.html.twig') }}
+{% endblock %}

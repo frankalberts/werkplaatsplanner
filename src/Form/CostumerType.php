@@ -14,7 +14,7 @@ class CostumerType extends AbstractType
         $builder
             ->add('firstname')
             ->add('lastname')
-            ->add('nameprefix')
+            ->add('prefix')
             ->add('street')
             ->add('housenumber')
             ->add('postalcode')

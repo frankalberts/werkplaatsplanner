@@ -27,9 +27,9 @@ class Costumer
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable=true)
      */
-    private $nameprefix;
+    private $prefix;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -42,7 +42,7 @@ class Costumer
     private $housenumber;
 
     /**
-     * @ORM\Column(type="string", length=8)
+     * @ORM\Column(type="string", length=7)
      */
     private $postalcode;
 
@@ -52,7 +52,7 @@ class Costumer
     private $city;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $phone;
 
@@ -90,14 +90,14 @@ class Costumer
         return $this;
     }
 
-    public function getNameprefix(): ?string
+    public function getPrefix(): ?string
     {
-        return $this->nameprefix;
+        return $this->prefix;
     }
 
-    public function setNameprefix(string $nameprefix): self
+    public function setPrefix(?string $prefix): self
     {
-        $this->nameprefix = $nameprefix;
+        $this->prefix = $prefix;
 
         return $this;
     }
@@ -155,7 +155,7 @@ class Costumer
         return $this->phone;
     }
 
-    public function setPhone(?string $phone): self
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 

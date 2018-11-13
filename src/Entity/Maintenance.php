@@ -49,7 +49,10 @@ class Maintenance
     public function setTitle(string $title): self
     {
         $this->title = $title;
-
+        if (strlen($this->title) < 4)
+        {
+            echo "Length is kleiner dan 20";
+        }
         return $this;
     }
 
@@ -61,7 +64,10 @@ class Maintenance
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
+        if (strlen($this->description) < 20)
+        {
+            echo "Length is kleiner dan 20";
+        }
         return $this;
     }
 

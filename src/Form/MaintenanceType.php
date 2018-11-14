@@ -14,18 +14,20 @@ class MaintenanceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
-            ->add('description')
-            ->add('duration', ChoiceType::class,array(
+            ->add('title', null, array('label' => 'Titel'))
+            ->add('description', null, array('label' => 'Omschrijving'))
+            ->add('duration', ChoiceType::class, array(
                 'choices' => array(
-                    '1 uur' => "1 uur",
-                    '2 uur' => "2 uur",
-                    '4 uur' => "4 uur",
-                    '8 uur' => "8 uur",
-                )
+                    '1 uur' => "1",
+                    '2 uur' => "2",
+                    '4 uur' => "4",
+                    '8 uur' => "8",
+                ),
+                'label' => 'Duur'
             ))
             ->add('price', MoneyType::class, array(
                 'divisor' => 100,
+                'label' => 'Prijs',
             ))
         ;
     }

@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Maintenance index{% endblock %}
+{% block title %}Onderhoud index{% endblock %}
 
 {% block body %}
-    <h1>Maintenance index</h1>
+    <h1>Onderhoud index</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Duration</th>
-                <th>Price</th>
-                <th>actions</th>
+                <th>ID</th>
+                <th>Titel</th>
+                <th>Omschrijving</th>
+                <th>Duur</th>
+                <th>Prijs</th>
+                <th>acties</th>
             </tr>
         </thead>
         <tbody>
@@ -25,17 +25,17 @@
                 <td>{{ maintenance.duration }}</td>
                 <td>{{ maintenance.price }}</td>
                 <td>
-                    <a href="{{ path('maintenance_show', {'id': maintenance.id}) }}">show</a>
-                    <a href="{{ path('maintenance_edit', {'id': maintenance.id}) }}">edit</a>
+                    <a href="{{ path('maintenance_show', {'id': maintenance.id}) }}">Bekijken</a>
+                    <a href="{{ path('maintenance_edit', {'id': maintenance.id}) }}">Aanpassen</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Geen records gevonden</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('maintenance_new') }}">Create new</a>
+    <a href="{{ path('maintenance_new') }}">Creëer nieuw</a>
 {% endblock %}

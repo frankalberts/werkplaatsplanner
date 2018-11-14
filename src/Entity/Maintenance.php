@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MaintenanceRepository")
@@ -18,11 +19,13 @@ class Maintenance
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\Length(min="3", minMessage="De lengte van de titel is niet groter dan 3.")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(min="20", minMessage="De lengte van de Omschrijving is niet groter dan 20.")
      */
     private $description;
 
@@ -49,10 +52,6 @@ class Maintenance
     public function setTitle(string $title): self
     {
         $this->title = $title;
-        if (strlen($this->title) < 4)
-        {
-            echo "Length is kleiner dan 20";
-        }
         return $this;
     }
 
@@ -64,10 +63,6 @@ class Maintenance
     public function setDescription(string $description): self
     {
         $this->description = $description;
-        if (strlen($this->description) < 20)
-        {
-            echo "Length is kleiner dan 20";
-        }
         return $this;
     }
 
@@ -79,7 +74,6 @@ class Maintenance
     public function setDuration(int $duration): self
     {
         $this->duration = $duration;
-
         return $this;
     }
 

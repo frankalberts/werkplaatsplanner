@@ -1,24 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Costumer index{% endblock %}
+{% block title %}Klant index{% endblock %}
 
 {% block body %}
-    <h1>Costumer index</h1>
+    <h1>Klant index</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
+                <th>ID</th>
+                <th>Voornaam</th>
+                <th>Achternaam</th>
                 <th>Prefix</th>
-                <th>Street</th>
-                <th>Housenumber</th>
-                <th>Postalcode</th>
-                <th>City</th>
-                <th>Phone</th>
+                <th>Straat</th>
+                <th>Huisnummer</th>
+                <th>Postcode</th>
+                <th>Plaats</th>
+                <th>Telefoonnummer</th>
                 <th>Email</th>
-                <th>actions</th>
+                <th>acties</th>
             </tr>
         </thead>
         <tbody>
@@ -35,17 +35,17 @@
                 <td>{{ costumer.phone }}</td>
                 <td>{{ costumer.email }}</td>
                 <td>
-                    <a href="{{ path('costumer_show', {'id': costumer.id}) }}">show</a>
-                    <a href="{{ path('costumer_edit', {'id': costumer.id}) }}">edit</a>
+                    <a href="{{ path('costumer_show', {'id': costumer.id}) }}">Bekijken</a>
+                    <a href="{{ path('costumer_edit', {'id': costumer.id}) }}">Aanpassen</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="11">no records found</td>
+                <td colspan="11">Geen records gevonden</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('costumer_new') }}">Create new</a>
+    <a href="{{ path('costumer_new') }}">Creëer nieuw</a>
 {% endblock %}

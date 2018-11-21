@@ -18,10 +18,10 @@ class MaintenanceType extends AbstractType
             ->add('description', null, array('label' => 'Omschrijving'))
             ->add('duration', ChoiceType::class, array(
                 'choices' => array(
-                    '1 uur' => "1",
-                    '2 uur' => "2",
-                    '4 uur' => "4",
-                    '8 uur' => "8",
+                    '1 uur' => 1,
+                    '2 uur' => 2,
+                    '4 uur' => 4,
+                    '8 uur' => 8,
                 ),
                 'label' => 'Duur'
             ))

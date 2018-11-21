@@ -3,9 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AvailabilityRepository")
+ * @UniqueEntity(
+ *     fields={"branch", "workdate"},
+ *     errorPath="workdate",
+ *     message="Op deze datum is bij dit filiaal al een afspraak gepland, kies een andere datum.")
  */
 class Availability
 {

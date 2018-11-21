@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Availability;
 use App\Form\AvailabilityType;
 use App\Repository\AvailabilityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +36,13 @@ class AvailabilityController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($availability);
-            $em->flush();
+            try
+            {
+                $em->flush();
+            }
+            catch (UniqueConstraintViolationException $exception) {
+
+            }
 
             return $this->redirectToRoute('availability_index');
         }
@@ -86,5 +93,10 @@ class AvailabilityController extends AbstractController
         }
 
         return $this->redirectToRoute('availability_index');
+    }
+    public function batch(Request $request): Response
+    {
+        $form = $this->createForm(AvailabilityType::class);
+        $form->handleRequest($request);
     }
 }

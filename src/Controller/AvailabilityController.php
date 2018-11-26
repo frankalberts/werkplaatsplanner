@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Availability;
 use App\Form\AvailabilityType;
+use App\Form\BatchAvailabilityType;
 use App\Repository\AvailabilityRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,6 +55,45 @@ class AvailabilityController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @return Response
+     * @Route("/batch", name="availability_batch", methods="GET|POST")
+     */
+    public function batch(Request $request): Response
+    {
+        $form = $this->createForm(BatchAvailabilityType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+
+            $from = $data['fromdate'];
+            $to = $data['todate'];
+            $to->modify('+ 1 days');
+            $days = $data['days'];
+
+            while ($from < $to) {
+                $availability = new Availability();
+                if (in_array($from->format('w'), $days))
+                {
+                    $availability->setBranch($data['branch']);
+                    $availability->setWorkdate(clone $from);
+                    $availability->setHours($data['hours']);
+                    $em->persist($availability);
+                }
+                $from->modify('+ 1 days');
+            }
+            $em->flush();
+            $em->clear();
+
+            return $this->redirectToRoute('availability_index');
+        }return $this->render('availability/batch.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="availability_show", methods="GET")
      */
     public function show(Availability $availability): Response
@@ -93,10 +133,5 @@ class AvailabilityController extends AbstractController
         }
 
         return $this->redirectToRoute('availability_index');
-    }
-    public function batch(Request $request): Response
-    {
-        $form = $this->createForm(AvailabilityType::class);
-        $form->handleRequest($request);
     }
 }

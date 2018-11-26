@@ -3,9 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Availability;
-use Doctrine\DBAL\Types\DateType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -14,10 +14,10 @@ class BatchAvailabilityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('branch')
-            ->add('fromdate', DateType::class)
-            ->add('todate', DateType::class)
-            ->add('days', CheckboxType::class, array(
+            ->add('branch', null, array('label' => 'Filiaal'))
+            ->add('fromdate', DateType::class, array('widget' => 'choice', 'data' => new \DateTime()))
+            ->add('todate', DateType::class, array('widget' => 'choice', 'data' => new \DateTime()))
+            ->add('days', ChoiceType::class, array(
                 'choices' => array(
                     'Maandag' => 0,
                     'Dinsdag' => 1,
@@ -26,15 +26,24 @@ class BatchAvailabilityType extends AbstractType
                     'Vrijdag' => 4,
                     'Zaterdag' => 5,
                     'Zondag' => 6
-            )))
-            ->add('hours')
+                ),
+                'multiple' => true,
+                'expanded' => true,
+                'required' => true,
+                'label' => "Welke dagen word het onderhoud uitgevoerd."
+                ))
+            ->add('hours', null, array('label' => 'Uren'))
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    private function getBranches(): array
     {
-        $resolver->setDefaults([
-            'data_class' => Availability::class,
-        ]);
+        $branches = $this->branchRepostory->findall();
+        $result = [];
+        foreach ($branches as $branch) {
+            $result[$branch['name']] = $branch['city'];
+        }
+
+        return $result;
     }
 }

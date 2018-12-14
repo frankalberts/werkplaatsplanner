@@ -1,48 +1,110 @@
-<table>
-    <thead>
-    <tr>
-        <th colspan="7" class="center">
-            {{ time|date('F') }}
-        </th>
-    </tr>
-    <tr>
-        <th width="12%">Sunday</th>
-        <th width="15%">Monday</th>
-        <th width="15%">Tuesday</th>
-        <th width="16%">Wednesday</th>
-        <th width="15%">Thursday</th>
-        <th width="15%">Friday</th>
-        <th width="12%">Saturday</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        {% set daysInMonth = time|date('t') %}
-        {% set startDow = time|date('F 1\\s\\t Y')|date('w') %}
-        {% set dow = startDow %}
-        {% for day in range(1,daysInMonth) %}
-        {% if loop.first and startDow != 0 %}
-            <td colspan="{{ startDow }}"></td>
-        {% endif %}
-        <td>
-            <div>
-                <div>{{ day }}</div>
-                <div>
-                    {# day content here #}
-                </div>
-            </div>
-        </td>
-        {% if loop.last and dow != 6 %}
-            <td colspan="{{ 6 - dow }}">&nbsp;</td>
-        {% endif %}
-        {% if dow == 6 %}
-        {% set dow = 0 %}
-    </tr>
-    <tr>
-        {% else %}
-            {% set dow = dow + 1 %}
-        {% endif %}
-        {% endfor %}
-    </tr>
-    </tbody>
-</table>
+{% extends 'base.html.twig' %}
+
+{% block title %}Beschikbaarheid{% endblock %}
+
+{% block body %}
+
+    {#
+  time can be any string acceptable by http://www.php.net/strtotime, the
+  template will output that time's month.
+  If you don't want to pass in a date you can set time like this:
+  {% set time = "now"|date("U") %}
+  {% set time = "December 2012"|date("U") %}
+  How ever you want to output items onto the calendar is a different issue,
+  but I'd assume pushing everything into an array numerically indexed by that day:
+  $days = array(1=>array('Something on the first'),31=>array('Halloween'));
+ #}
+
+    {{ include('availability/_form.html.twig', {'button_label': 'reload'}) }}
+
+
+    {% set time = month|date("U") %}
+    <h3>{{ branch }}</h3>
+    <table>
+        <thead>
+        <tr>
+            <th style="text-align: center;padding-right: 8px">
+                <a href="#" onclick="location.href='{{ path('availability_calender', {'month':  month|date_modify('-1 month')|date('F')}) }}' "><</a>
+            </th>
+            <th style="text-align: center">
+                {{ month|date('F') }}
+            </th>
+            <th style="text-align: center;padding-left: 8px">
+                <a href="#" onclick="location.href='{{ path('availability_calender', {'month':  month|date_modify('+1 month')|date('F')}) }}'">></a>
+            </th>
+        </tr>
+        <tr>
+            <th width="12%">Sunday</th>
+            <th width="15%">Monday</th>
+            <th width="15%">Tuesday</th>
+            <th width="16%">Wednesday</th>
+            <th width="15%">Thursday</th>
+            <th width="15%">Friday</th>
+            <th width="12%">Saturday</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% set daysInMonth = time|date('t') %}
+            {% set startDow = time|date('F 1\\s\\t Y')|date('w') %}
+            {% set dow = startDow %}
+            {% set date = "now"|date('d/m/y') %}
+            {% for day in range(1,daysInMonth) %}
+            {% set result = "false" %}
+            {% if loop.first and startDow != 0 %}
+                <td colspan="{{ startDow }}"></td>
+            {% endif %}
+            {% for availability in availabilities %}
+                {% if day == availability.workDate|date("d") and month|date("M") == availability.workDate|date("M") %}
+                    {% set result = "true" %}
+                    {% if 12 - availability.hours <= 0 %}
+                        <td style="border-style: solid; background: red" >
+                            <div>
+                                <div onclick="location.href='{{ path('availability_edit', { 'id': availability.id }) }}'">{{ day }}</div>
+                                <div>
+                                    <p>{{ 12 - availability.hours }}</p>
+                                </div>
+                            </div>
+                        </td>
+                    {% endif %}
+                    {% if 12 - availability.hours > 0 %}
+                        <td style="border-style: solid; background: greenyellow">
+                            <div>
+                                <div onclick="location.href='{{ path('availability_edit', { 'id': availability.id }) }}'">{{ day }}</div>
+                                <div>
+                                    <p>{{ 12 - availability.hours }}</p>
+                                </div>
+                            </div>
+                        </td>
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+            {% if result == "false" %}
+                <td style="border-style: solid; background: greenyellow">
+                    <div>
+                        <div onclick="location.href='{{ path('availability_new') }}'">{{ day }}</div>
+                        <div>
+                            <p>12</p>
+                        </div>
+                    </div>
+                </td>
+            {% endif %}
+            {% if loop.last and dow != 6 %}
+                <td colspan="{{ 6 - dow }}">&nbsp;</td>
+            {% endif %}
+            {% if dow == 6 %}
+            {% set dow = 0 %}
+        </tr>
+        <tr>
+            {% else %}
+                {% set dow = dow + 1 %}
+            {% endif %}
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+    <a href="{{ path('availability_new') }}">Nieuwe beschikbaarheid aanmaken</a>
+    </br>
+    <a href="{{ path('availability_batch') }}">Nieuwe batch met beschikbaarheid aanmaken</a>
+{% endblock %}

@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Availability;
 use App\Form\AvailabilityType;
 use App\Form\BatchAvailabilityType;
+use App\Form\CalenderType;
 use App\Repository\AvailabilityRepository;
+use App\Repository\CalenderRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,8 +57,6 @@ class AvailabilityController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return Response
      * @Route("/batch", name="availability_batch", methods="GET|POST")
      */
     public function batch(Request $request): Response
@@ -91,6 +91,29 @@ class AvailabilityController extends AbstractController
         }return $this->render('availability/batch.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/calender/{month}", name="availability_calender", methods="GET|POST")
+     */
+    public function calender(CalenderRepository $calenderRepository, Request $request): Response
+    {
+        $form = $this->createForm(CalenderType::class);
+        $form->handleRequest($request);
+        $data = $form->getData();
+        $month = $request->attributes->get('month');
+        $time = new \DateTimeImmutable("2018-" . $month . "-01");
+
+        dump($calenderRepository->findByFiliaal($data["branch"]));
+        return $this->render(
+            'availability/calender.html.twig', [
+                'branch' => $data["branch"],
+                'availabilities' => $calenderRepository->findByFiliaal($data["branch"]),
+                'month' =>$request->attributes->get('month'),
+                'form' => $form->createView(),
+                'time' => $time,
+            ]
+        );
     }
 
     /**
